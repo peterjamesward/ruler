@@ -184,7 +184,7 @@ abScales =
                 , S.fill "black"
                 , textAnchor "middle"
                 , fontFamily "monospace"
-                , fontSize "48"
+                , fontSize "54"
                 ]
                 [ Svg.text txt
                 ]
