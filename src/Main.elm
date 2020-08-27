@@ -83,6 +83,68 @@ cmSpacing =
     10
 
 
+bracket y left right =
+    let
+        centre =
+            (left + right) // 2
+    in
+    [ Svg.line
+        [ x1 <| String.fromFloat (toFloat (left + 5) * cmSpacing)
+        , y1 <| String.fromInt y
+        , x2 <| String.fromFloat (toFloat (centre - 5) * cmSpacing)
+        , y2 <| String.fromInt y
+        , stroke "black"
+        , strokeWidth "3"
+        ]
+        []
+    , Svg.line
+        [ x1 <| String.fromFloat (toFloat (centre + 5) * cmSpacing)
+        , y1 <| String.fromInt y
+        , x2 <| String.fromFloat (toFloat (right - 5) * cmSpacing)
+        , y2 <| String.fromInt y
+        , stroke "black"
+        , strokeWidth "3"
+        ]
+        []
+    , Svg.line
+        [ x1 <| String.fromFloat (toFloat (centre - 5) * cmSpacing)
+        , y1 <| String.fromInt y
+        , x2 <| String.fromFloat (toFloat centre * cmSpacing)
+        , y2 <| String.fromInt <| y - 10
+        , stroke "black"
+        , strokeWidth "3"
+        ]
+        []
+    , Svg.line
+        [ x1 <| String.fromFloat (toFloat centre * cmSpacing)
+        , y1 <| String.fromInt <| y - 10
+        , x2 <| String.fromFloat (toFloat (centre + 5) * cmSpacing)
+        , y2 <| String.fromInt y
+        , stroke "black"
+        , strokeWidth "3"
+        ]
+        []
+    , Svg.line
+        [ x1 <| String.fromFloat (toFloat (right - 5) * cmSpacing)
+        , y1 <| String.fromInt y
+        , x2 <| String.fromFloat (toFloat right * cmSpacing)
+        , y2 <| String.fromInt <| y + 10
+        , stroke "black"
+        , strokeWidth "3"
+        ]
+        []
+    , Svg.line
+        [ x1 <| String.fromFloat (toFloat left * cmSpacing)
+        , y1 <| String.fromInt <| y + 10
+        , x2 <| String.fromFloat (toFloat (left + 5) * cmSpacing)
+        , y2 <| String.fromInt y
+        , stroke "black"
+        , strokeWidth "3"
+        ]
+        []
+    ]
+
+
 tick spacing i =
     [ Svg.line
         [ x1 <| String.fromFloat (toFloat i * spacing)
@@ -115,7 +177,7 @@ abScales =
         systemText xPos txt =
             [ Svg.text_
                 [ x <| String.fromFloat (toFloat xPos * cmSpacing)
-                , y "-160"
+                , y "-180"
                 , S.fill "black"
                 , textAnchor "middle"
                 , fontFamily "monospace"
@@ -126,10 +188,12 @@ abScales =
             ]
 
         aSystemText =
-            systemText 100 "A SYSTEM G⍺"
+            bracket -140 0 190
+                ++ systemText 95 "A SYSTEM G⍺"
 
         bSystemText =
-            systemText 240 "B SYSTEM G⍺"
+            bracket -140 190 310
+                ++ systemText 250 "B SYSTEM G⍺"
     in
     svg
         [ viewBox "-100 -200 5200 200"
