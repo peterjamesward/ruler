@@ -1,7 +1,8 @@
 module Main exposing (main)
 
 import Html exposing (Html, div)
-import Svg exposing (..)
+import Html.Attributes exposing (style)
+import Svg exposing (svg, text)
 import Svg.Attributes as S
     exposing
         ( fontFamily
@@ -22,8 +23,16 @@ import Svg.Attributes as S
 main : Html msg
 main =
     div []
-        [ rangeScale
-        , abScales
+        [ div
+            []
+            [ rangeScale
+            , abScales
+            ]
+        , div
+            [ style "transform" "rotateY(180deg)" ]
+            [ rangeScale
+            , abScales
+            ]
         ]
 
 
