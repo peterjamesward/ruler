@@ -112,32 +112,24 @@ abScales =
         labeller x =
             String.fromInt <| modBy 230 (40 + x)
 
+        systemText xPos txt =
+            [ Svg.text_
+                [ x <| String.fromFloat (toFloat xPos * cmSpacing)
+                , y "-160"
+                , S.fill "black"
+                , textAnchor "middle"
+                , fontFamily "monospace"
+                , fontSize "48"
+                ]
+                [ Svg.text txt
+                ]
+            ]
+
         aSystemText =
-                   [ Svg.text_
-                        [ x <| String.fromFloat (toFloat 100 * cmSpacing)
-                        , y "-160"
-                        , S.fill "black"
-                        , textAnchor "middle"
-                        , fontFamily "monospace"
-                        , fontSize "48"
-                        ]
-                        [ Svg.text <| "A SYSTEM G⍺"
-                        ]
-                    ]
+            systemText 100 "A SYSTEM G⍺"
 
         bSystemText =
-                   [ Svg.text_
-                        [ x <| String.fromFloat (toFloat 240 * cmSpacing)
-                        , y "-160"
-                        , S.fill "black"
-                        , textAnchor "middle"
-                        , fontFamily "monospace"
-                        , fontSize "48"
-                        ]
-                        [ Svg.text <| "B SYSTEM G⍺"
-                        ]
-                    ]
-
+            systemText 240 "B SYSTEM G⍺"
     in
     svg
         [ viewBox "-100 -200 5200 200"
@@ -148,4 +140,4 @@ abScales =
         List.concatMap (tick cmSpacing) (List.range 0 310)
             ++ List.concatMap (labelWithModifier labeller cmSpacing) (List.range 10 310)
             ++ aSystemText
-            ++bSystemText
+            ++ bSystemText
