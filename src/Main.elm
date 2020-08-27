@@ -19,22 +19,6 @@ import Svg.Attributes as S
         )
 
 
-inchScale20 =
-    1400
-
-
-cmScale12 =
-    (12 / 20) * (1 / 2.54) * toFloat inchScale20
-
-
-inchScale20px =
-    String.fromFloat inchScale20 ++ "px"
-
-
-cmScale12px =
-    String.fromFloat cmScale12 ++ "px"
-
-
 main : Html msg
 main =
     div []
@@ -91,8 +75,13 @@ labelWithModifier f spacing i =
         []
 
 
-inchSpacing = 25.4
-cmSpacing = 10
+inchSpacing =
+    25.4
+
+
+cmSpacing =
+    10
+
 
 tick spacing i =
     [ Svg.line
@@ -118,12 +107,37 @@ rangeScale =
             ++ List.concatMap (label inchSpacing) (List.range 0 190)
 
 
-
-
 abScales =
     let
         labeller x =
             String.fromInt <| modBy 230 (40 + x)
+
+        aSystemText =
+                   [ Svg.text_
+                        [ x <| String.fromFloat (toFloat 100 * cmSpacing)
+                        , y "-160"
+                        , S.fill "black"
+                        , textAnchor "middle"
+                        , fontFamily "monospace"
+                        , fontSize "48"
+                        ]
+                        [ Svg.text <| "A SYSTEM G⍺"
+                        ]
+                    ]
+
+        bSystemText =
+                   [ Svg.text_
+                        [ x <| String.fromFloat (toFloat 240 * cmSpacing)
+                        , y "-160"
+                        , S.fill "black"
+                        , textAnchor "middle"
+                        , fontFamily "monospace"
+                        , fontSize "48"
+                        ]
+                        [ Svg.text <| "B SYSTEM G⍺"
+                        ]
+                    ]
+
     in
     svg
         [ viewBox "-100 -200 5200 200"
@@ -133,3 +147,5 @@ abScales =
     <|
         List.concatMap (tick cmSpacing) (List.range 0 310)
             ++ List.concatMap (labelWithModifier labeller cmSpacing) (List.range 10 310)
+            ++ aSystemText
+            ++bSystemText
