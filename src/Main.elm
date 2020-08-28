@@ -89,8 +89,11 @@ inchSpacing =
 
 
 cmSpacing =
-    10
+    10.0
 
+printerScaling = 1.0544
+viewBoxWidth = 1400.0 * printerScaling
+pixelWidth = String.fromFloat viewBoxWidth ++ "px"
 
 bracket y left right =
     let
@@ -173,7 +176,7 @@ tick spacing i =
 rangeScale =
     svg
         [ viewBox <| "-100 -200 5200 100"
-        , S.width "1400px"
+        , S.width pixelWidth
         , S.height "100px"
         ]
     <|
@@ -209,7 +212,7 @@ abScales =
     in
     svg
         [ viewBox "-100 -200 5200 200"
-        , S.width "1400px"
+        , S.width pixelWidth
         , S.height "100px"
         ]
     <|
