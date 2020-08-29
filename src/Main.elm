@@ -3,21 +3,12 @@ module Main exposing (main)
 import Html exposing (Html, div)
 import Html.Attributes exposing (style)
 import Svg exposing (svg, text)
-import Svg.Attributes as S
-    exposing
-        ( fontFamily
-        , fontSize
-        , stroke
-        , strokeWidth
-        , textAnchor
-        , viewBox
-        , x
-        , x1
-        , x2
-        , y
-        , y1
-        , y2
-        )
+import Svg.Attributes as S exposing (fontFamily, fontSize, rotate, stroke, strokeWidth, textAnchor, transform, viewBox, x, x1, x2, y, y1, y2)
+
+
+type Edge
+    = LeftEdge
+    | RightEdge
 
 
 main : Html msg
@@ -25,14 +16,21 @@ main =
     div []
         [ div
             []
-            [ rangeScale
-            , abScales
+            [ rangeScale LeftEdge
+            , rangeScale RightEdge
             ]
         , div
-            [ style "transform" "rotateY(180deg)" ]
-            [ rangeScale
-            , abScales
+            []
+            [ abScales LeftEdge
+            , abScales RightEdge
             ]
+
+        {- , div
+           [ style "transform" "rotateY(180deg)" ]
+           [ rangeScale RightEdge
+           , abScales RightEdge
+           ]
+        -}
         ]
 
 
@@ -48,35 +46,48 @@ tickSize i =
             30
 
 
-label spacing i =
+labelWithModifier f edge spacing bigness i =
     if modBy 10 i == 0 then
         [ Svg.text_
-            [ x <| String.fromFloat (toFloat i * spacing)
-            , y "-80"
+            [ x <|
+                String.fromFloat <|
+                    (toFloat i * spacing)
+                        + (case edge of
+                            LeftEdge ->
+                                40
+
+                            RightEdge ->
+                                0
+                          )
+            , y <|
+                case edge of
+                    LeftEdge ->
+                        "100"
+
+                    RightEdge ->
+                        "-100"
             , S.fill "black"
             , textAnchor "middle"
             , fontFamily "monospace"
-            , fontSize "60"
-            ]
-            [ Svg.text <| String.fromInt i
-            ]
-        ]
+            , fontSize bigness
+            , rotate <|
+                case edge of
+                    LeftEdge ->
+                        "180"
 
-    else
-        []
-
-
-labelWithModifier f spacing i =
-    if modBy 10 i == 0 then
-        [ Svg.text_
-            [ x <| String.fromFloat (toFloat i * spacing)
-            , y "-80"
-            , S.fill "black"
-            , textAnchor "middle"
-            , fontFamily "monospace"
-            , fontSize "48"
+                    RightEdge ->
+                        "0"
             ]
-            [ Svg.text <| f i
+            [ Svg.text <|
+                (case edge of
+                    LeftEdge ->
+                        String.reverse
+
+                    RightEdge ->
+                        identity
+                )
+                <|
+                    f i
             ]
         ]
 
@@ -91,9 +102,18 @@ inchSpacing =
 cmSpacing =
     10.0
 
-printerScaling = 1.0544
-viewBoxWidth = 1400.0 * printerScaling
-pixelWidth = String.fromFloat viewBoxWidth ++ "px"
+
+printerScaling =
+    1.0544
+
+
+viewBoxWidth =
+    1400.0 * printerScaling
+
+
+pixelWidth =
+    String.fromFloat viewBoxWidth ++ "px"
+
 
 bracket y left right =
     let
@@ -160,12 +180,19 @@ bracket y left right =
     ]
 
 
-tick spacing i =
+tick edge spacing i =
     [ Svg.line
         [ x1 <| String.fromFloat (toFloat i * spacing)
         , y1 "0"
         , x2 <| String.fromFloat (toFloat i * spacing)
-        , y2 <| String.fromInt <| 0 - tickSize i
+        , y2 <|
+            String.fromInt <|
+                case edge of
+                    RightEdge ->
+                        0 - tickSize i
+
+                    LeftEdge ->
+                        tickSize i
         , stroke "black"
         , strokeWidth "3"
         ]
@@ -173,18 +200,28 @@ tick spacing i =
     ]
 
 
-rangeScale =
+rangeScale edge =
+    let
+        labeller x =
+            String.fromInt x
+    in
     svg
-        [ viewBox <| "-100 -200 5200 100"
+        [ viewBox <|
+            case edge of
+                LeftEdge ->
+                    "-100 0 5200 100"
+
+                RightEdge ->
+                    "-100 -200 5200 300"
         , S.width pixelWidth
         , S.height "100px"
         ]
     <|
-        List.concatMap (tick inchSpacing) (List.range 0 200)
-            ++ List.concatMap (label inchSpacing) (List.range 0 190)
+        List.concatMap (tick edge inchSpacing) (List.range 0 200)
+            ++ List.concatMap (labelWithModifier labeller edge inchSpacing "60") (List.range 0 190)
 
 
-abScales =
+abScales edge =
     let
         labeller x =
             String.fromInt <| modBy 230 (40 + x)
@@ -211,12 +248,18 @@ abScales =
                 ++ systemText 250 "\"B\" SYSTEM G⍺"
     in
     svg
-        [ viewBox "-100 -200 5200 200"
+        [ viewBox <|
+            case edge of
+                LeftEdge ->
+                    "-100 0 5200 100"
+
+                RightEdge ->
+                    "-100 -200 5200 300"
         , S.width pixelWidth
         , S.height "100px"
         ]
     <|
-        List.concatMap (tick cmSpacing) (List.range 0 310)
-            ++ List.concatMap (labelWithModifier labeller cmSpacing) (List.range 10 310)
+        List.concatMap (tick edge cmSpacing) (List.range 0 310)
+            ++ List.concatMap (labelWithModifier labeller edge cmSpacing "50") (List.range 10 310)
             ++ aSystemText
             ++ bSystemText
