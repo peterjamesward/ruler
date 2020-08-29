@@ -46,7 +46,7 @@ labelWithModifier f spacing bigness i =
                 [ x <|
                     String.fromFloat <|
                         (toFloat i * spacing)
-                , y <| String.fromFloat <| ruleWidthSVG - 100
+                , y <| String.fromFloat <| ruleWidthSVG - textInset
                 , S.fill "black"
                 , textAnchor "middle"
                 , fontFamily "monospace"
@@ -64,7 +64,7 @@ labelWithModifier f spacing bigness i =
                     String.fromFloat <|
                         (toFloat i * spacing)
                             + 40
-                , y <| String.fromFloat <| 0 - ruleWidthSVG + 120
+                , y <| String.fromFloat <| 0 - ruleWidthSVG + textInset
                 , S.fill "black"
                 , textAnchor "middle"
                 , fontFamily "monospace"
@@ -92,17 +92,29 @@ cmSpacing =
     10.0
 
 
+textInset =
+    80
+
+
+systemTextY =
+    40
+
+
 ruleWidth =
     -- width of physical rule in cm
     4
 
 
 ruleWidthSVG =
-    400
+    200
 
 
 printerScaling =
-    1.0544
+    1.0
+
+
+
+--    1.0544
 
 
 viewBoxWidth =
@@ -122,7 +134,7 @@ bracket y left right =
             15
 
         fromEdge =
-            200
+            125
     in
     [ Svg.line
         [ x1 <| String.fromFloat (toFloat (left + 5) * cmSpacing)
@@ -285,11 +297,11 @@ rangeScale =
     svg
         [ viewBox "-100 0 5200 200"
         , S.width pixelWidth
-        , S.height "400px"
+        , S.height "600px"
         ]
     <|
         List.concatMap (tick inchSpacing) (List.range 0 200)
-            ++ List.concatMap (labelWithModifier labeller inchSpacing "72") (List.range 0 190)
+            ++ List.concatMap (labelWithModifier labeller inchSpacing "50") (List.range 0 190)
 
 
 abScales =
@@ -300,11 +312,11 @@ abScales =
         systemTextRight xPos txt =
             [ Svg.text_
                 [ x <| String.fromFloat (toFloat xPos * cmSpacing)
-                , y <| String.fromFloat <| 140.0
+                , y <| String.fromFloat <| systemTextY
                 , S.fill "black"
                 , textAnchor "middle"
                 , fontFamily "monospace"
-                , fontSize "54"
+                , fontSize "40"
                 ]
                 [ Svg.text txt
                 ]
@@ -313,11 +325,11 @@ abScales =
         systemTextLeft xPos txt =
             [ Svg.text_
                 [ x <| String.fromFloat (toFloat xPos * cmSpacing)
-                , y <| String.fromFloat <| 0 - 140.0
+                , y <| String.fromFloat <| 0 - systemTextY
                 , S.fill "black"
                 , textAnchor "middle"
                 , fontFamily "monospace"
-                , fontSize "54"
+                , fontSize "40"
                 , rotate "180"
                 ]
                 [ Svg.text <| String.reverse txt
@@ -326,21 +338,21 @@ abScales =
 
         aSystemText =
             bracket -140 0 190
-                ++ systemTextRight 95 "\"A\" SYSTEM G⍺"
-                ++ systemTextLeft 100 "\"A\" SYSTEM G⍺"
+                ++ systemTextRight 96 "\"A\" SYSTEM G⍺"
+                ++ systemTextLeft 99 "\"A\" SYSTEM G⍺"
 
         bSystemText =
             bracket -140 190 320
                 ++ systemTextRight 255 "\"B\" SYSTEM G⍺"
-                ++ systemTextLeft 260 "\"B\" SYSTEM G⍺"
+                ++ systemTextLeft 258 "\"B\" SYSTEM G⍺"
     in
     svg
         [ viewBox "-100 0 5200 200"
         , S.width pixelWidth
-        , S.height "400px"
+        , S.height "600px"
         ]
     <|
         List.concatMap (tick cmSpacing) (List.range 0 310)
-            ++ List.concatMap (labelWithModifier labeller cmSpacing "50") (List.range 10 310)
+            ++ List.concatMap (labelWithModifier labeller cmSpacing "40") (List.range 10 310)
             ++ aSystemText
             ++ bSystemText
