@@ -97,7 +97,7 @@ textInset =
 
 
 systemTextY =
-    40
+    45
 
 
 ruleWidth =
@@ -110,11 +110,7 @@ ruleWidthSVG =
 
 
 printerScaling =
-    1.0
-
-
-
---    1.0544
+    1.0544
 
 
 viewBoxWidth =
@@ -253,39 +249,26 @@ tick spacing i =
     let
         theX =
             String.fromFloat (toFloat i * spacing)
+
+        oneSide sign =
+            Svg.line
+                [ x1 theX
+                , y1 <|
+                    String.fromInt <|
+                        sign
+                            * ruleWidthSVG
+                , x2 theX
+                , y2 <|
+                    String.fromInt <|
+                        sign
+                            * (ruleWidthSVG - tickSize i)
+                , stroke "black"
+                , strokeWidth "3"
+                ]
+                []
     in
-    [ Svg.line
-        [ x1 theX
-        , y1 <|
-            String.fromInt <|
-                0
-                    + ruleWidthSVG
-        , x2 theX
-        , y2 <|
-            String.fromInt <|
-                0
-                    + ruleWidthSVG
-                    - tickSize i
-        , stroke "black"
-        , strokeWidth "3"
-        ]
-        []
-    , Svg.line
-        [ x1 theX
-        , y1 <|
-            String.fromInt <|
-                0
-                    - ruleWidthSVG
-        , x2 theX
-        , y2 <|
-            String.fromInt <|
-                0
-                    - ruleWidthSVG
-                    + tickSize i
-        , stroke "black"
-        , strokeWidth "3"
-        ]
-        []
+    [ oneSide 1
+    , oneSide -1
     ]
 
 
@@ -309,32 +292,35 @@ abScales =
         labeller x =
             String.fromInt <| modBy 230 (40 + x)
 
-        systemTextRight xPos txt =
+        commonSystemText sign xPos txt =
             [ Svg.text_
                 [ x <| String.fromFloat (toFloat xPos * cmSpacing)
-                , y <| String.fromFloat <| systemTextY
+                , y <| String.fromFloat <| sign * systemTextY
                 , S.fill "black"
                 , textAnchor "middle"
                 , fontFamily "monospace"
                 , fontSize "40"
+                , rotate <|
+                    if sign < 0 then
+                        "180"
+
+                    else
+                        "0"
                 ]
-                [ Svg.text txt
+                [ Svg.text <|
+                    if sign < 0 then
+                        String.reverse txt
+
+                    else
+                        txt
                 ]
             ]
 
+        systemTextRight xPos txt =
+            commonSystemText 1 xPos txt
+
         systemTextLeft xPos txt =
-            [ Svg.text_
-                [ x <| String.fromFloat (toFloat xPos * cmSpacing)
-                , y <| String.fromFloat <| 0 - systemTextY
-                , S.fill "black"
-                , textAnchor "middle"
-                , fontFamily "monospace"
-                , fontSize "40"
-                , rotate "180"
-                ]
-                [ Svg.text <| String.reverse txt
-                ]
-            ]
+            commonSystemText -1 xPos txt
 
         aSystemText =
             bracket -140 0 190
