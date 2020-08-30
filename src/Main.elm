@@ -1,7 +1,6 @@
 module Main exposing (main)
 
 import Html exposing (Html, div)
-import Html.Attributes exposing (style)
 import Svg exposing (svg, text)
 import Svg.Attributes as S exposing (fontFamily, fontSize, rotate, stroke, strokeWidth, textAnchor, transform, viewBox, x, x1, x2, y, y1, y2)
 
@@ -26,6 +25,11 @@ main =
         -}
         ]
 
+htmlBoxHeight = "180px"
+
+viewBoxHeight = String.fromInt <| 2 * ruleHalfWidthSVG
+viewBoxMinY = String.fromInt <| -1 * ruleHalfWidthSVG
+viewBoxActual = "-100 " ++ viewBoxMinY ++ " 5200 " ++ viewBoxHeight
 
 tickSize i =
     case ( modBy 10 i, modBy 5 i ) of
@@ -46,7 +50,7 @@ labelWithModifier f spacing bigness i =
                 [ x <|
                     String.fromFloat <|
                         (toFloat i * spacing)
-                , y <| String.fromFloat <| ruleWidthSVG - textInset
+                , y <| String.fromFloat <| ruleHalfWidthSVG - textInset
                 , S.fill "black"
                 , textAnchor "middle"
                 , fontFamily "monospace"
@@ -64,7 +68,7 @@ labelWithModifier f spacing bigness i =
                     String.fromFloat <|
                         (toFloat i * spacing)
                             + 40
-                , y <| String.fromFloat <| 0 - ruleWidthSVG + textInset
+                , y <| String.fromFloat <| 0 - ruleHalfWidthSVG + textInset
                 , S.fill "black"
                 , textAnchor "middle"
                 , fontFamily "monospace"
@@ -105,7 +109,7 @@ ruleWidth =
     4
 
 
-ruleWidthSVG =
+ruleHalfWidthSVG =
     200
 
 
@@ -144,108 +148,108 @@ bracket y left right =
     in
     [ Svg.line
         [ x1 <| String.fromFloat (toFloat (left + endInset) * cmSpacing)
-        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge + notchHeight
+        , y1 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge + notchHeight
         , x2 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
-        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
+        , y2 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
-        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
+        , y1 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
-        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
+        , y2 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
-        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
+        , y1 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat centre * cmSpacing)
-        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge - notchHeight
+        , y2 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge - notchHeight
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat centre * cmSpacing)
-        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge - notchHeight
+        , y1 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge - notchHeight
         , x2 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
-        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
+        , y2 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
-        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
+        , y1 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat (right - endInset - notchHalfWidth) * cmSpacing)
-        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
+        , y2 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat (right - endInset - notchHalfWidth) * cmSpacing)
-        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
+        , y1 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat (right - endInset) * cmSpacing)
-        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge + notchHeight
+        , y2 <| String.fromInt <| 0 + ruleHalfWidthSVG - fromEdge + notchHeight
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat (left + endInset) * cmSpacing)
-        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge + notchHeight
+        , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge + notchHeight
         , x2 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
-        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
+        , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
-        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
+        , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
-        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
+        , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
-        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
+        , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat centre * cmSpacing)
-        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge - notchHeight
+        , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge - notchHeight
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat centre * cmSpacing)
-        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge - notchHeight
+        , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge - notchHeight
         , x2 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
-        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
+        , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
-        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
+        , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat (right - 10) * cmSpacing)
-        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
+        , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat (right - notchHalfWidth - endInset) * cmSpacing)
-        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
+        , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat (right - endInset) * cmSpacing)
-        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge + notchHeight
+        , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge + notchHeight
         , stroke "black"
         , strokeWidth "3"
         ]
@@ -266,12 +270,12 @@ tick spacing i =
                 , y1 <|
                     String.fromInt <|
                         sign
-                            * ruleWidthSVG
+                            * ruleHalfWidthSVG
                 , x2 theX
                 , y2 <|
                     String.fromInt <|
                         sign
-                            * (ruleWidthSVG - tickSize i)
+                            * (ruleHalfWidthSVG - tickSize i)
                 , stroke "black"
                 , strokeWidth "3"
                 ]
@@ -288,9 +292,9 @@ rangeScale =
             String.fromInt x
     in
     svg
-        [ viewBox "-100 0 5200 200"
+        [ viewBox viewBoxActual
         , S.width pixelWidth
-        , S.height "600px"
+        , S.height htmlBoxHeight
         ]
     <|
         List.concatMap (tick inchSpacing) (List.range 0 200)
@@ -343,9 +347,9 @@ abScales =
                 ++ systemTextLeft 258 "\"B\" SYSTEM G⍺"
     in
     svg
-        [ viewBox "-100 0 5200 200"
+        [ viewBox viewBoxActual
         , S.width pixelWidth
-        , S.height "600px"
+        , S.height htmlBoxHeight
         ]
     <|
         List.concatMap (tick cmSpacing) (List.range 0 310)
