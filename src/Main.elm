@@ -122,108 +122,118 @@ pixelWidth =
 
 
 bracket y left right =
+    -- Each bracket is six line segments.
+    -- Probably neater to use SVG path but barely worth it.
     let
         centre =
             (left + right) // 2
 
-        notch =
+        notchHeight =
             15
 
         fromEdge =
             125
+
+        endInset =
+            5
+
+        notchHalfWidth =
+            -- Doubles as length of end droop
+            5
+
     in
     [ Svg.line
-        [ x1 <| String.fromFloat (toFloat (left + 5) * cmSpacing)
-        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge + notch
-        , x2 <| String.fromFloat (toFloat (left + 10) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (left + endInset) * cmSpacing)
+        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge + notchHeight
+        , x2 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
         , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
-        [ x1 <| String.fromFloat (toFloat (left + 10) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
         , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
-        , x2 <| String.fromFloat (toFloat (centre - 5) * cmSpacing)
+        , x2 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
         , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
-        [ x1 <| String.fromFloat (toFloat (centre - 5) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
         , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat centre * cmSpacing)
-        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge - notch
+        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge - notchHeight
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat centre * cmSpacing)
-        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge - notch
-        , x2 <| String.fromFloat (toFloat (centre + 5) * cmSpacing)
+        , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge - notchHeight
+        , x2 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
         , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
-        [ x1 <| String.fromFloat (toFloat (centre + 5) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
         , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
-        , x2 <| String.fromFloat (toFloat (right - 10) * cmSpacing)
+        , x2 <| String.fromFloat (toFloat (right - endInset - notchHalfWidth) * cmSpacing)
         , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
-        [ x1 <| String.fromFloat (toFloat (right - 10) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (right - endInset - notchHalfWidth) * cmSpacing)
         , y1 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge
-        , x2 <| String.fromFloat (toFloat (right - 5) * cmSpacing)
-        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge + notch
+        , x2 <| String.fromFloat (toFloat (right - endInset) * cmSpacing)
+        , y2 <| String.fromInt <| 0 + ruleWidthSVG - fromEdge + notchHeight
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
-        [ x1 <| String.fromFloat (toFloat (left + 5) * cmSpacing)
-        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge + notch
-        , x2 <| String.fromFloat (toFloat (left + 10) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (left + endInset) * cmSpacing)
+        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge + notchHeight
+        , x2 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
         , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
-        [ x1 <| String.fromFloat (toFloat (left + 10) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
         , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
-        , x2 <| String.fromFloat (toFloat (centre - 5) * cmSpacing)
+        , x2 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
         , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
-        [ x1 <| String.fromFloat (toFloat (centre - 5) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
         , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat centre * cmSpacing)
-        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge - notch
+        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge - notchHeight
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
         [ x1 <| String.fromFloat (toFloat centre * cmSpacing)
-        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge - notch
-        , x2 <| String.fromFloat (toFloat (centre + 5) * cmSpacing)
+        , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge - notchHeight
+        , x2 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
         , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
         , stroke "black"
         , strokeWidth "3"
         ]
         []
     , Svg.line
-        [ x1 <| String.fromFloat (toFloat (centre + 5) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
         , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
         , x2 <| String.fromFloat (toFloat (right - 10) * cmSpacing)
         , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
@@ -232,10 +242,10 @@ bracket y left right =
         ]
         []
     , Svg.line
-        [ x1 <| String.fromFloat (toFloat (right - 10) * cmSpacing)
+        [ x1 <| String.fromFloat (toFloat (right - notchHalfWidth - endInset) * cmSpacing)
         , y1 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge
-        , x2 <| String.fromFloat (toFloat (right - 5) * cmSpacing)
-        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge + notch
+        , x2 <| String.fromFloat (toFloat (right - endInset) * cmSpacing)
+        , y2 <| String.fromInt <| negate <| 0 + ruleWidthSVG - fromEdge + notchHeight
         , stroke "black"
         , strokeWidth "3"
         ]
