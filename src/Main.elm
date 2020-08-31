@@ -1,13 +1,14 @@
 module Main exposing (main)
 
 import Html exposing (Html, div)
-import Svg exposing (svg, text)
-import Svg.Attributes as S exposing (fontFamily, fontSize, rotate, stroke, strokeWidth, textAnchor, transform, viewBox, x, x1, x2, y, y1, y2)
+import Html.Attributes exposing (style)
+import Svg exposing (svg)
+import Svg.Attributes as S exposing (fontFamily, fontSize, rotate, stroke, strokeWidth, textAnchor, viewBox, x, x1, x2, y, y1, y2)
 
 
 main : Html msg
 main =
-    div []
+    div [ style "transform" "rotateX(180deg)" ]
         [ div
             []
             [ rangeScale
@@ -25,11 +26,22 @@ main =
         -}
         ]
 
-htmlBoxHeight = "180px"
 
-viewBoxHeight = String.fromInt <| 2 * ruleHalfWidthSVG
-viewBoxMinY = String.fromInt <| -1 * ruleHalfWidthSVG
-viewBoxActual = "-100 " ++ viewBoxMinY ++ " 5200 " ++ viewBoxHeight
+htmlBoxHeight =
+    "180px"
+
+
+viewBoxHeight =
+    String.fromInt <| 2 * ruleHalfWidthSVG
+
+
+viewBoxMinY =
+    String.fromInt <| -1 * ruleHalfWidthSVG
+
+
+viewBoxActual =
+    "-100 " ++ viewBoxMinY ++ " 5200 " ++ viewBoxHeight
+
 
 tickSize i =
     case ( modBy 10 i, modBy 5 i ) of
@@ -104,11 +116,6 @@ systemTextY =
     45
 
 
-ruleWidth =
-    -- width of physical rule in cm
-    4
-
-
 ruleHalfWidthSVG =
     200
 
@@ -125,7 +132,7 @@ pixelWidth =
     String.fromFloat viewBoxWidth ++ "px"
 
 
-bracket y left right =
+bracket left right =
     -- Each bracket is six line segments.
     -- Probably neater to use SVG path but barely worth it.
     let
@@ -144,7 +151,6 @@ bracket y left right =
         notchHalfWidth =
             -- Doubles as length of end droop
             5
-
     in
     [ Svg.line
         [ x1 <| String.fromFloat (toFloat (left + endInset) * cmSpacing)
@@ -288,7 +294,7 @@ tick spacing i =
 
 rangeScale =
     let
-        labeller x =
+        labeler x =
             String.fromInt x
     in
     svg
@@ -298,12 +304,12 @@ rangeScale =
         ]
     <|
         List.concatMap (tick inchSpacing) (List.range 0 200)
-            ++ List.concatMap (labelWithModifier labeller inchSpacing "50") (List.range 0 190)
+            ++ List.concatMap (labelWithModifier labeler inchSpacing "50") (List.range 0 190)
 
 
 abScales =
     let
-        labeller x =
+        labeler x =
             String.fromInt <| modBy 230 (40 + x)
 
         commonSystemText sign xPos txt =
@@ -337,12 +343,12 @@ abScales =
             commonSystemText -1 xPos txt
 
         aSystemText =
-            bracket -140 0 190
+            bracket 0 190
                 ++ systemTextRight 96 "\"A\" SYSTEM G⍺"
                 ++ systemTextLeft 99 "\"A\" SYSTEM G⍺"
 
         bSystemText =
-            bracket -140 190 320
+            bracket 190 320
                 ++ systemTextRight 255 "\"B\" SYSTEM G⍺"
                 ++ systemTextLeft 258 "\"B\" SYSTEM G⍺"
     in
@@ -353,6 +359,6 @@ abScales =
         ]
     <|
         List.concatMap (tick cmSpacing) (List.range 0 310)
-            ++ List.concatMap (labelWithModifier labeller cmSpacing "40") (List.range 10 310)
+            ++ List.concatMap (labelWithModifier labeler cmSpacing "40") (List.range 10 310)
             ++ aSystemText
             ++ bSystemText
