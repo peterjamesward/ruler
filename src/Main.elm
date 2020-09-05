@@ -8,8 +8,9 @@ import Svg.Attributes as S exposing (fontFamily, fontSize, rotate, stroke, strok
 
 main : Html msg
 main =
-    div []
-        --style "transform" "rotateX(180deg)" ]
+    div
+        [ style "transform" "rotateX(180deg)"
+        ]
         [ div
             []
             [ rangeScale
