@@ -9,7 +9,7 @@ import Svg.Attributes as S exposing (fontFamily, fontSize, rotate, stroke, strok
 main : Html msg
 main =
     div
-        [ style "transform" "rotateX(180deg)"
+        [ --style "transform" "rotateX(180deg)"
         ]
         [ div
             []
@@ -50,46 +50,56 @@ tickSize i =
             30
 
 
-labelWithModifier f spacing bigness i =
-    let
-        rightEdgeLabel =
-            [ Svg.text_
-                [ x <|
-                    String.fromFloat <|
-                        (toFloat i * spacing)
-                , y <| String.fromFloat <| ruleHalfWidthSVG - textInset
-                , S.fill "black"
-                , textAnchor "middle"
-                , fontFamily "monospace"
-                , fontSize bigness
-                , rotate <| "0"
-                ]
-                [ Svg.text <|
-                    f i
-                ]
-            ]
-
-        leftEdgeLabel =
-            [ Svg.text_
-                [ x <|
-                    String.fromFloat <|
-                        (toFloat i * spacing)
-                            + 40
-                , y <| String.fromFloat <| 0 - ruleHalfWidthSVG + textInset
-                , S.fill "black"
-                , textAnchor "middle"
-                , fontFamily "monospace"
-                , fontSize bigness
-                , rotate <| "180"
-                ]
-                [ Svg.text <|
-                    String.reverse <|
-                        f i
-                ]
-            ]
-    in
+rightEdgeLabel f spacing bigness i =
     if modBy 10 i == 0 then
-        rightEdgeLabel ++ leftEdgeLabel
+        [ Svg.text_
+            [ x <|
+                String.fromFloat <|
+                    (toFloat i * spacing)
+            , y <| String.fromFloat <| ruleHalfWidthSVG - textInset
+            , S.fill "black"
+            , textAnchor "middle"
+            , fontFamily "monospace"
+            , fontSize bigness
+            , rotate <| "0"
+            ]
+            [ Svg.text <|
+                f i
+            ]
+        ]
+
+    else
+        []
+
+
+leftEdgeLabel f spacing bigness i =
+    if modBy 10 i == 0 then
+        [ Svg.text_
+            [ x <|
+                String.fromFloat <|
+                    (toFloat i * spacing)
+                        + 40
+            , y <| String.fromFloat <| 0 - ruleHalfWidthSVG + textInset
+            , S.fill "black"
+            , textAnchor "middle"
+            , fontFamily "monospace"
+            , fontSize bigness
+            , rotate <| "180"
+            ]
+            [ Svg.text <|
+                String.reverse <|
+                    f i
+            ]
+        ]
+
+    else
+        []
+
+
+labelWithModifier f spacing bigness i =
+    if modBy 10 i == 0 then
+        rightEdgeLabel f spacing bigness i
+            ++ leftEdgeLabel f spacing bigness i
 
     else
         []
@@ -201,62 +211,6 @@ bracket left right =
         , strokeWidth "3"
         ]
         []
-
-    {- , Svg.line
-           [ x1 <| String.fromFloat (toFloat (left + endInset) * cmSpacing)
-           , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge + notchHeight
-           , x2 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
-           , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
-           , stroke "black"
-           , strokeWidth "3"
-           ]
-           []
-       , Svg.line
-           [ x1 <| String.fromFloat (toFloat (left + endInset + notchHalfWidth) * cmSpacing)
-           , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
-           , x2 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
-           , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
-           , stroke "black"
-           , strokeWidth "3"
-           ]
-           []
-       , Svg.line
-           [ x1 <| String.fromFloat (toFloat (centre - notchHalfWidth) * cmSpacing)
-           , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
-           , x2 <| String.fromFloat (toFloat centre * cmSpacing)
-           , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge - notchHeight
-           , stroke "black"
-           , strokeWidth "3"
-           ]
-           []
-       , Svg.line
-           [ x1 <| String.fromFloat (toFloat centre * cmSpacing)
-           , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge - notchHeight
-           , x2 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
-           , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
-           , stroke "black"
-           , strokeWidth "3"
-           ]
-           []
-       , Svg.line
-           [ x1 <| String.fromFloat (toFloat (centre + notchHalfWidth) * cmSpacing)
-           , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
-           , x2 <| String.fromFloat (toFloat (right - 10) * cmSpacing)
-           , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
-           , stroke "black"
-           , strokeWidth "3"
-           ]
-           []
-       , Svg.line
-           [ x1 <| String.fromFloat (toFloat (right - notchHalfWidth - endInset) * cmSpacing)
-           , y1 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge
-           , x2 <| String.fromFloat (toFloat (right - endInset) * cmSpacing)
-           , y2 <| String.fromInt <| negate <| 0 + ruleHalfWidthSVG - fromEdge + notchHeight
-           , stroke "black"
-           , strokeWidth "3"
-           ]
-           []
-    -}
     ]
 
 
@@ -339,6 +293,6 @@ abScales =
         ]
     <|
         List.concatMap (tick cmSpacing) (List.range 0 310)
-            ++ List.concatMap (labelWithModifier labeler cmSpacing "40") (List.range 10 310)
+            ++ List.concatMap (rightEdgeLabel labeler cmSpacing "40") (List.range 10 310)
             ++ aSystemText
             ++ bSystemText
