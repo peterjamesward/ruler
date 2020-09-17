@@ -122,7 +122,7 @@ systemTextY =
 
 
 ruleHalfWidthSVG =
-    255
+    250
 
 
 printerScaling =
