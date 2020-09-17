@@ -9,7 +9,7 @@ import Svg.Attributes as S exposing (fontFamily, fontSize, rotate, stroke, strok
 main : Html msg
 main =
     div
-        [ --style "transform" "rotateX(180deg)"
+        [ style "transform" "rotateX(180deg)"
         ]
         [ div
             []
@@ -78,7 +78,7 @@ leftEdgeLabel f spacing bigness i =
             [ x <|
                 String.fromFloat <|
                     (toFloat i * spacing)
-                        + 40
+                        + 25
             , y <| String.fromFloat <| 0 - ruleHalfWidthSVG + textInset
             , S.fill "black"
             , textAnchor "middle"
@@ -118,11 +118,11 @@ textInset =
 
 
 systemTextY =
-    45
+    60
 
 
 ruleHalfWidthSVG =
-    200
+    255
 
 
 printerScaling =
@@ -148,7 +148,7 @@ bracket left right =
             15
 
         fromEdge =
-            125
+            140
 
         endInset =
             5
